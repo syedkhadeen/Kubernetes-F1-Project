@@ -1,0 +1,110 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-service
+  namespace: racemetrics
+spec:
+  selector:
+    app: auth-service
+  ports:
+    - protocol: TCP
+      port: 5001
+      targetPort: 5000
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-fetch-service
+  namespace: racemetrics
+spec:
+  selector:
+    app: api-fetch-service
+  ports:
+    - protocol: TCP
+      port: 5002
+      targetPort: 5000
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: scraper-service
+  namespace: racemetrics
+spec:
+  selector:
+    app: scraper-service
+  ports:
+    - protocol: TCP
+      port: 5003
+      targetPort: 5000
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: data-cleaner-service
+  namespace: racemetrics
+spec:
+  selector:
+    app: data-cleaner-service
+  ports:
+    - protocol: TCP
+      port: 5004
+      targetPort: 5000
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: driver-service
+  namespace: racemetrics
+spec:
+  selector:
+    app: driver-service
+  ports:
+    - protocol: TCP
+      port: 5005
+      targetPort: 5000
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: constructor-service
+  namespace: racemetrics
+spec:
+  selector:
+    app: constructor-service
+  ports:
+    - protocol: TCP
+      port: 5006
+      targetPort: 5000
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: race-service
+  namespace: racemetrics
+spec:
+  selector:
+    app: race-service
+  ports:
+    - protocol: TCP
+      port: 5007
+      targetPort: 5000
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: stats-service
+  namespace: racemetrics
+spec:
+  selector:
+    app: stats-service
+  ports:
+    - protocol: TCP
+      port: 5008
+      targetPort: 5000

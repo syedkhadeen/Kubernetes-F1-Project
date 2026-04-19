@@ -1,0 +1,154 @@
+services:
+  auth-service:
+    build: ./auth-service
+    ports:
+      - "5001:5000"
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/racemetrics
+      - JWT_SECRET=${JWT_SECRET:-change-me-in-production}
+    depends_on:
+      - mongo
+    networks:
+      - racemetrics-network
+
+  api-fetch-service:
+    build: ./api-fetch-service
+    ports:
+      - "5002:5000"
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/racemetrics
+    depends_on:
+      - mongo
+    networks:
+      - racemetrics-network
+
+  scraper-service:
+    build: ./scraper-service
+    ports:
+      - "5003:5000"
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/racemetrics
+    depends_on:
+      - mongo
+    networks:
+      - racemetrics-network
+
+  data-cleaner-service:
+    build: ./data-cleaner-service
+    ports:
+      - "5004:5000"
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/racemetrics
+    depends_on:
+      - mongo
+    networks:
+      - racemetrics-network
+
+  driver-service:
+    build: ./driver-service
+    ports:
+      - "5005:5000"
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/racemetrics
+    depends_on:
+      - mongo
+    networks:
+      - racemetrics-network
+
+  constructor-service:
+    build: ./constructor-service
+    ports:
+      - "5006:5000"
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/racemetrics
+    depends_on:
+      - mongo
+    networks:
+      - racemetrics-network
+
+  race-service:
+    build: ./race-service
+    ports:
+      - "5007:5000"
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/racemetrics
+    depends_on:
+      - mongo
+    networks:
+      - racemetrics-network
+
+  stats-service:
+    build: ./stats-service
+    ports:
+      - "5008:5000"
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/racemetrics
+    depends_on:
+      - mongo
+    networks:
+      - racemetrics-network
+
+  frontend-service:
+    build: ./frontend-service
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_API_BASE_URL=http://localhost
+      - REACT_APP_AUTH_SERVICE_URL=http://localhost:5001
+      - REACT_APP_API_FETCH_SERVICE_URL=http://localhost:5002
+      - REACT_APP_DRIVER_SERVICE_URL=http://localhost:5005
+      - REACT_APP_CONSTRUCTOR_SERVICE_URL=http://localhost:5006
+      - REACT_APP_RACE_SERVICE_URL=http://localhost:5007
+      - REACT_APP_STATS_SERVICE_URL=http://localhost:5008
+    depends_on:
+      - auth-service
+      - stats-service
+      - driver-service
+      - constructor-service
+      - race-service
+    networks:
+      - racemetrics-network
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - auth-service
+      - api-fetch-service
+      - scraper-service
+      - data-cleaner-service
+      - driver-service
+      - constructor-service
+      - race-service
+      - stats-service
+      - frontend-service
+    networks:
+      - racemetrics-network
+
+  mongo:
+    image: mongo:6.0
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    environment:
+      - MONGO_INITDB_DATABASE=racemetrics
+    networks:
+      - racemetrics-network
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - racemetrics-network
+
+volumes:
+  mongo_data:
+
+networks:
+  racemetrics-network:
+    driver: bridge

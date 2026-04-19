@@ -1,0 +1,76 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: racemetrics-ingress
+  namespace: racemetrics
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: racemetrics.local
+    http:
+      paths:
+      - path: /auth(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: auth-service
+            port:
+              number: 5001
+      - path: /api-fetch(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: api-fetch-service
+            port:
+              number: 5002
+      - path: /scraper(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: scraper-service
+            port:
+              number: 5003
+      - path: /data-cleaner(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: data-cleaner-service
+            port:
+              number: 5004
+      - path: /drivers(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: driver-service
+            port:
+              number: 5005
+      - path: /constructors(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: constructor-service
+            port:
+              number: 5006
+      - path: /races(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: race-service
+            port:
+              number: 5007
+      - path: /stats(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: stats-service
+            port:
+              number: 5008
+      - path: /(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: frontend-service
+            port:
+              number: 80

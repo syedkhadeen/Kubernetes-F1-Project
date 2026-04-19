@@ -1,0 +1,218 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-service
+  namespace: racemetrics
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth-service
+  template:
+    metadata:
+      labels:
+        app: auth-service
+    spec:
+      containers:
+      - name: auth-service
+        image: racemetrics/auth-service:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 5000
+        env:
+        - name: MONGO_URI
+          value: mongodb://mongo:27017/racemetrics
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: racemetrics-secrets
+              key: JWT_SECRET
+
+---
+# API Fetch Service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-fetch-service
+  namespace: racemetrics
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-fetch-service
+  template:
+    metadata:
+      labels:
+        app: api-fetch-service
+    spec:
+      containers:
+      - name: api-fetch-service
+        image: racemetrics/api-fetch-service:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 5000
+        env:
+        - name: MONGO_URI
+          value: mongodb://mongo:27017/racemetrics
+
+---
+# Scraper Service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scraper-service
+  namespace: racemetrics
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: scraper-service
+  template:
+    metadata:
+      labels:
+        app: scraper-service
+    spec:
+      containers:
+      - name: scraper-service
+        image: racemetrics/scraper-service:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 5000
+        env:
+        - name: MONGO_URI
+          value: mongodb://mongo:27017/racemetrics
+
+---
+# Data Cleaner Service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: data-cleaner-service
+  namespace: racemetrics
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: data-cleaner-service
+  template:
+    metadata:
+      labels:
+        app: data-cleaner-service
+    spec:
+      containers:
+      - name: data-cleaner-service
+        image: racemetrics/data-cleaner-service:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 5000
+        env:
+        - name: MONGO_URI
+          value: mongodb://mongo:27017/racemetrics
+
+---
+# Driver Service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: driver-service
+  namespace: racemetrics
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: driver-service
+  template:
+    metadata:
+      labels:
+        app: driver-service
+    spec:
+      containers:
+      - name: driver-service
+        image: racemetrics/driver-service:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 5000
+        env:
+        - name: MONGO_URI
+          value: mongodb://mongo:27017/racemetrics
+
+---
+# Constructor Service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: constructor-service
+  namespace: racemetrics
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: constructor-service
+  template:
+    metadata:
+      labels:
+        app: constructor-service
+    spec:
+      containers:
+      - name: constructor-service
+        image: racemetrics/constructor-service:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 5000
+        env:
+        - name: MONGO_URI
+          value: mongodb://mongo:27017/racemetrics
+
+---
+# Race Service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: race-service
+  namespace: racemetrics
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: race-service
+  template:
+    metadata:
+      labels:
+        app: race-service
+    spec:
+      containers:
+      - name: race-service
+        image: racemetrics/race-service:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 5000
+        env:
+        - name: MONGO_URI
+          value: mongodb://mongo:27017/racemetrics
+
+---
+# Stats Service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stats-service
+  namespace: racemetrics
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: stats-service
+  template:
+    metadata:
+      labels:
+        app: stats-service
+    spec:
+      containers:
+      - name: stats-service
+        image: racemetrics/stats-service:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 5000
+        env:
+        - name: MONGO_URI
+          value: mongodb://mongo:27017/racemetrics
